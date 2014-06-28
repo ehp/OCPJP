@@ -3,7 +3,7 @@
 
 <QuestionSet version="4">
   <Name>Basic stuff</Name>
-  <Description><![CDATA[Questions on ...
+  <Description><![CDATA[Questions on Java SE 7
 <hr>
 <b>Info:</b><br>
 <ul>
@@ -14,7 +14,7 @@
 <li>Licence: (Public domain, Creative Commons etc)
 </ul>]]></Description>
   <RecommendedTimePerQuestion>120</RecommendedTimePerQuestion>
-  <Category>Category:Subcategory</Category>
+  <Category>OCPJP: Basic stuff for Java SE 7</Category>
   <Questions>
     <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
       <QuestionText><![CDATA[Given following code:

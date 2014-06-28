@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QuestionSet SYSTEM "inquisitionQuestions.dtd">
+
+<QuestionSet version="4">
+  <Name>Language Enhancements</Name>
+  <Description><![CDATA[Questions on Java SE 7 (Objective 1: Language Enhancements)
+<hr>
+<b>Info:</b><br>
+<ul>
+<li>Maintainer: Georgy Bolyuba <a href="mailto:bolyuba@gmail.com">bolyuba@gmail.com</a>
+<li>Home page: <a href="https://github.com/georgy/OCPJP">github</a>
+<li>Version: 0.2
+<li>Date published: 2011-11-23
+<li>Licence: (Public domain, Creative Commons etc)</li>
+</ul>
+<ul>
+<li>Objective 1.1 Use String in the switch statement (JLS4, Chapter 14.11)</li>
+<li>Objective 1.2 Use binary literals, numeric literals with underscores (JLS4, Chapter 3.10)</li>
+<li>Objective 1.3 Use try-with-resources (JLS4, Chapter 14.20.3)</li>
+<li>Objective 1.4 Use multi-catch in exception statements (JLS4, Chapter 14.20)</li>
+<li>Objective 1.5 Use the diamond operator with generic declarations (JLS4, Chapter 15.9</li>
+<li>Objective 1.6 Use more precise rethrow in exceptions (Cannot find this in the spec. But it is defiantly a compiler change, so it should be there)</li>
+</ul>]]></Description>
+  <RecommendedTimePerQuestion>120</RecommendedTimePerQuestion>
+  <Category>OCPJP 7: Objective 1 - Language Enhancements</Category>
+  <Questions>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[What would be the result of compiling this code and running it without any command line parameters in Java SE 7?
+
+<java>
+public class Example1 {
+    public static void main(String[] args) {
+        switch (args[0]) {
+            case "A": break;
+            case "B": break;
+            default: break;
+        }
+    }
+}
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">Compilation error</Option>
+        <Option correct="false">Compiles and runs without any output</Option>
+        <Option correct="false">Compiles with warning, as it has to case String to int</Option>
+        <Option correct="true">Compiles, but throws runtime exception</Option>
+      </Options>
+      <ExplanationText>ArrayIndexOutOfBoundsException will be thrown. args is an empty array in this situation</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[What would be the result of compiling this code and running it without any command line parameters in Java SE 7?
+<java>
+public class Example2 {
+    public static void main(String[] args) {
+        switch ((String)null) {
+            case "A": break;
+            case "B": break;
+            default: break;
+        }
+    }
+}</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">Code will not compile</Option>
+        <Option correct="false">Compiles, runs without any output</Option>
+        <Option correct="false">Compiles, throws AssertError in runtime</Option>
+        <Option correct="true">Compiles, throws NullPointerException in runtime</Option>
+        <Option correct="false">Compiles with warnings, since you cannot cast null to Stirng. Runs normally</Option>
+      </Options>
+      <ExplanationText>If the Expression of switch statement evaluates to null, a NullPointerException is thrown and the entire switch statement completes abruptly for that reason (JLS 14.11)</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given following code
+
+<java>
+.1. public class Example1 {
+ 2.     public static void main(String[] args) {
+ 3.        doswitch("aa");
+ 4.    }
+ 5.
+ 6.    private static void doswitch(String str) {
+ 7.        switch (str) {
+ 8.            case "a" + "a":
+ 9.                System.out.println("a+a");
+10.                break;
+11.            case "ab":
+12.                System.out.println("ab");
+13.                break;
+14.            case "aa":
+15.                System.out.println("aa");
+16.                break;
+17.            default:
+18.                System.out.println("default");
+19.        }
+20.    }
+21. }
+</java>
+
+if you try to compile and run this program, what would be the result?]]></QuestionText>
+      <Options>
+        <Option correct="false">Compile time exception on line 7</Option>
+        <Option correct="false">Compile time exception on line 8</Option>
+        <Option correct="false">Compile time exception on line 11</Option>
+        <Option correct="true">Compile time exception on line 14</Option>
+        <Option correct="false">Compile time exception on line 15</Option>
+        <Option correct="false">Compiles and runs, printing nothing</Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "aa"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "a+a"]]></Option>
+      </Options>
+      <ExplanationText><![CDATA["a" + "a" is a costant expression that is equal to "aa" (JLS 15.28). No two of the case constant expressions associated with a switch statement may have the same value (JLS 14.11)]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given following code
+
+<java>
+.1. public class Example1 {
+ 2.     public static void main(String[] args) {
+ 3.        doswitch(null);
+ 4.    }
+ 5.
+ 6.    private static void doswitch(String str) {
+ 7.        switch (str) {
+ 8.            case "aa":
+ 9.                System.out.println("a+a");
+10.            case null:
+11.                System.out.println("Look ma, null!");
+12.                break;
+13.        }
+14.    }
+15. }
+</java>
+
+if you try to compile and run this program, what would be the result?]]></QuestionText>
+      <Options>
+        <Option correct="false">Compiles and runs without output</Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "Look ma, null!"]]></Option>
+        <Option correct="false">Compiles and runs, throwing NullPointerException</Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "a+a" followed by "Look ma, null!"]]></Option>
+        <Option correct="true">The code will not compile</Option>
+      </Options>
+      <ExplanationText><![CDATA[Code will not compile. <code>null</code> is not a constant expression (JLS 15.28), but <code>case</code> requires constant expression (JLS 15.28) or enum constant (8.9.1)]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given following code
+
+<java>
+public class Example5 {
+    public static void main(String[] args) {
+        switch ("AA".toLowerCase().substring(1)) {   // 1
+            case "aa" + "a":                         // 2
+                System.out.println("aa+a");
+                break;
+            case "aa":                               // 3
+                System.out.println("aa");
+                break;
+            case (!true ? "a": "A"):                 // 4
+                System.out.println("a");
+                break;
+            default:
+                System.out.println("Missed!");
+                break;
+        }
+    }
+}
+</java>
+
+if you try to compile and run this program, what would be the result?]]></QuestionText>
+      <Options>
+        <Option correct="false"><![CDATA[Code will fail to compile because of the line // 1]]></Option>
+        <Option correct="false"><![CDATA[Code will fail to compile because of the line // 2]]></Option>
+        <Option correct="false"><![CDATA[Code will fail to compile because of the line // 3]]></Option>
+        <Option correct="false"><![CDATA[Code will fail to compile because of the line // 4]]></Option>
+        <Option correct="false"><![CDATA[Code compiles and will print "aaa"]]></Option>
+        <Option correct="false"><![CDATA[Code compiles and will print "aa"]]></Option>
+        <Option correct="false"><![CDATA[Code compiles and will print "a"]]></Option>
+        <Option correct="true"><![CDATA[Code compiles and will print "Missed!"]]></Option>
+      </Options>
+      <ExplanationText><![CDATA[The code is valid. Note: Line //4 is constant expression, but if you replace it with (args.length > 0? "a": "A") it will not be constant and the code will not compile.]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText><![CDATA[What is the valid way to declare and initialize variable val in Java 7 SE? (Choose all that apply)
+<java>
+0. byte val = 125;
+1. int val = 42;
+2. int val = 42L;
+3. int val = 0xaA;
+4. int val = 12_22;
+5. int val = 0bCAFE;
+6. int val = 0b10_01_01;
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">Only 1</Option>
+        <Option correct="false">1 and 3</Option>
+        <Option correct="false">1, 3 and 5</Option>
+        <Option correct="false">2 and 5</Option>
+        <Option correct="false">All, except 6</Option>
+        <Option correct="false">All, except 5</Option>
+        <Option correct="true">All, except 2 and 5</Option>
+      </Options>
+      <ExplanationText><![CDATA[(Objective 1.2) Use binary literals, numeric literals with underscores 
+<p>
+Option #0 is <b>correct</b>. 125 is integer literal of type int. But no explicit convertion reviquired for this because 125 is a constant expressions (JLS 15.28) and assigment convertion (5.2) allows narrowing primitive conversion from int to byte, short or char. However, 125L would require explicit cast<br/>
+Option #1 is <b>correct</b>. 42 is an integer literal of type int (JLS 3.10.1)<br/>
+Option #2 is <b>not correct</b>. 42L is an is an integer literal of type long (JLS 3.10.1, 15.28). For this code to work explicit cast (JSL 5.1.3)<br/>
+Option #3 is <b>correct</b>. 0xaA is an integer literal of type int, expressed as hexadecimal (JLS 3.10.1)<br/>
+Option #4 is <b>correct</b>. 12_22 is an integer literal of type int that uses underscore (new in JSE 7) (JLS 3.10.1)<br/>
+Option #5 is <b>not correct</b>. 0b preffix is used to start and integer literal, expressed as binary. Only 1 and 0 are allowed after 0b<br/>
+Option #6 is <b>correct</b>. 0b10_01_01 is valid binary integer literal of type int.<br/>
+</p>]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="false" singleOptionMode="false">
+      <QuestionText><![CDATA[What is the valid way to declare and initialize integer variable val in Java 7 SE? (Choose all that apply)
+
+<java>
+1. int val = 1234_5678_9012_3456_L; 
+2. int val = 0b_1000_0100_0111;
+3. int val = 4_________2;
+4. int val = _12_22;
+5. int val = 0x_CAFE;
+6. int val = 0xCAFE_;
+7. int val = 0_1234;
+8. int val = 0_8765;
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">1</Option>
+        <Option correct="false">2</Option>
+        <Option correct="true">3</Option>
+        <Option correct="false">4</Option>
+        <Option correct="false">5</Option>
+        <Option correct="false">6</Option>
+        <Option correct="true">7</Option>
+        <Option correct="false">8</Option>
+      </Options>
+      <ExplanationText><![CDATA[(Objective 1.2) Use binary literals, numeric literals with underscores
+<p>
+Option #1 is <b>not correct</b>. Underscores are not allowed before suffix L or l (JLS 3.10.1)<br/>
+Option #2 is <b>not correct</b>. Underscores are not allowed after prefix 0x or 0b (JLS 3.10.1)<br/>
+Option #3 is <b>correct</b>.<br/>
+Option #4 is <b>not correct</b>. _12_22 is indetifier, not an integer literal<br/>
+Option #5 is <b>not correct</b>. Underscores are not allowed after prefix 0x or 0b (JLS 3.10.1)<br/>
+Option #6 is <b>not correct</b>. Underscores are not allowed at the end of integer literals (JLS
+ 3.10.1)<br/>
+Option #7 is <b>correct</b>.<br/> 0_1234 is a correct octal integer literal (JLS 3.10.1)
+Option #8 is <b>not correct</b>.<br/> Octal integer literal can only use digits from 0 to 7, not 8.
+</p>]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText>What is the valid way to declare and initialize integer variable val using binary literals in Java 7 SE? (Choose all that apply)</QuestionText>
+      <Options>
+        <Option correct="false">int val = 10011010B;</Option>
+        <Option correct="false">int val = 10011010b;</Option>
+        <Option correct="true">int val = 0B10011010;</Option>
+        <Option correct="true">int val = 0b10011010;</Option>
+        <Option correct="false">int val = 0B_1001_1010;</Option>
+        <Option correct="true">int val = 0B1001_1010;</Option>
+        <Option correct="false">Only Java EE supports boolean litterals, not SE and not ME</Option>
+      </Options>
+      <ExplanationText>Check out JLS 3.10. Everything is pretty straight forward.</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText>What is the valid way to declare and initialize variable val using float point integer literals in Java 7 SE? (Choose all that apply)</QuestionText>
+      <Options>
+        <Option correct="true">double val = 1.1;</Option>
+        <Option correct="true">double val = 1e1;</Option>
+        <Option correct="true">double val = 0xFeA;</Option>
+        <Option correct="true">double val = 0xCAFEP10;</Option>
+        <Option correct="false">double val = 0xCAFEPA;</Option>
+        <Option correct="true">double val = 0xCA_FEP10;</Option>
+      </Options>
+      <ExplanationText>double val = 0xCAFEPA; is worng - P is ok, it is exponent indicator in hexidecimal format (you cannot use E or e). But exponent cannot be hexidecimal, it has to be decimal. See JLS 3.10.2</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText><![CDATA[Given proper import and throws statements and the code
+
+<java>
+try (MyResource res = new MyResource()) {
+  // code here
+}
+</java>
+
+what statements bellow are true? (Choose all that apply)]]></QuestionText>
+      <Options>
+        <Option correct="false">This code will not compile, because catch or finally block is missing</Option>
+        <Option correct="false">This code will compile</Option>
+        <Option correct="true">This code will compile, if MyResource implements AutoCloseable interface</Option>
+        <Option correct="false">This code will compile, if MyResource implements Closeable interface</Option>
+        <Option correct="false">This try block is valid, it is called try-with-resources and it cannot have any catch or finally blocks</Option>
+      </Options>
+      <ExplanationText><![CDATA[MyResource has to implement AutoClosable interface and it's only method close (JLS 14.20.3)]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText><![CDATA[Given proper import statements and code
+<java>
+public class Example2 implements AutoCloseable {
+
+    //insert code here
+
+}
+</java>
+
+what line(s) of code inserted independently, will allow the class to compile? (Choose all that apply)]]></QuestionText>
+      <Options>
+        <Option correct="true">public void close() throws Exception {}</Option>
+        <Option correct="true">public void close() {}</Option>
+        <Option correct="true">public void close() throws IOException {}</Option>
+        <Option correct="false">public void dispose() {}</Option>
+        <Option correct="false">public void dispose() throws Exception {}</Option>
+        <Option correct="false">public void release() {}</Option>
+        <Option correct="false">public void release() throws IOException {}</Option>
+      </Options>
+      <ExplanationText><![CDATA[The signature of the close method in AutoCloseable is:<br/><br/>
+<code>
+public void close() throws Exception {}
+</code><br/><br/>
+
+but you can narrow down the exception that you throw]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given the proper import statements and the code
+
+<java>
+public class Example3 {
+
+    static class Resource implements AutoCloseable {
+        private String val;
+
+        public Resource(String val) {
+            this.val = val;
+        }
+
+        public void close() {
+            System.out.println(val);
+        }
+    }
+
+    public static void main(String[] args) {
+        try(Resource r1 = new Resource("a"); Resource r2 = new Resource("b")) {
+            System.out.println("main");
+        }
+    }
+}
+</java>
+
+what would be the result of compiling and running this code?]]></QuestionText>
+      <Options>
+        <Option correct="true"><![CDATA[Compiles and runs, printing "main", "b", "a"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "a", "b", "main"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main"]]></Option>
+        <Option correct="false">Compiles, but throws runtime exception</Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main", "a", "b"]]></Option>
+      </Options>
+      <ExplanationText>This is the correct way to use try-with-resources. Resources are closed in reverse order (JLS 14.20.2)</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given the proper import statements and the code
+
+<java>
+public class Example4 {
+
+    static class Resource implements AutoCloseable {
+        private String val;
+
+        public Resource(String val) {
+            this.val = val;
+        }
+
+        public void close() {
+            System.out.println(val);
+        }
+    }
+
+    public static void main(String[] args) {
+        try(Resource r1 = new Resource("a"); Resource r2 = null) {
+            System.out.println("main");
+        }
+    }
+}
+</java>
+
+what would be the result of compiling and running this code?]]></QuestionText>
+      <Options>
+        <Option correct="false">Compiles, runs without any output</Option>
+        <Option correct="false">Compiles, throws NullPointerException in runtime</Option>
+        <Option correct="true"><![CDATA[Compiles and runs, printing "main", "a"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main" and throwing NullPointerException]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main", "a" and throwing NullPointerException]]></Option>
+      </Options>
+      <ExplanationText>This code is valid. try-with-resources is smart enough to check for null and skip null resources (JLS 14.20.2)</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given the proper import statements and the code
+
+<java>
+public class Example5 {
+
+    static class Resource implements AutoCloseable {
+        private String val;
+
+        public Resource(String val) {
+            this.val = val;
+        }
+
+        public void close() {
+            throw new UnsupportedOperationException("Not implemented yet");
+        }
+    }
+
+    public static void main(String[] args) {
+        try(Resource r1 = new Resource("a"); Resource r2 = null) {
+            System.out.println("main");
+
+            throw new IllegalArgumentException("Get me out of here");
+        }
+    }
+}
+</java>
+
+what would be the result of compiling and running this code? (Choose one that describes the situation better than the others)]]></QuestionText>
+      <Options>
+        <Option correct="false">Code will not compile</Option>
+        <Option correct="false">Code compiles, throws IllegalArgumentException</Option>
+        <Option correct="false">Code compiles, throws RuntimeException</Option>
+        <Option correct="false">Code compiles, throws UnsupportedOperationException</Option>
+        <Option correct="false">Code compiles, throws IllegalArgumentException, looses information UnsupportedOperationException</Option>
+        <Option correct="true">Code compiles, throws IllegalArgumentException, records UnsupportedOperationException as suppressed</Option>
+      </Options>
+      <ExplanationText><![CDATA[In JSE 7 Throwable now can store suppressed throwables. You can get them by calling Throwable.getSuppressed(). This is mainly done for try-with-resources.<br/><br/>
+
+If exception is thrown from one of the resources close() method and another exception is thrown from try {} block, resource exception is suppressed by the exception from the try {} block (JLS 14.20.2)]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given the proper import statements and the code
+
+<java>
+public class Example6 {
+
+    static class Resource implements AutoCloseable {
+        private String val;
+
+        public Resource(String val) {
+            this.val = val;
+        }
+
+        public void close() throws Exception {
+            System.out.println(val);
+        }
+    }
+
+    public static void main(String[] args) {
+        try(Resource r1 = new Resource("a")) {
+            System.out.println("main");
+        }
+    }
+}
+</java>
+
+what would be the result of compiling and running this code?]]></QuestionText>
+      <Options>
+        <Option correct="false">Compiles and runs without any output</Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "a", "main"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main", "a"]]></Option>
+        <Option correct="false">Compiles and runs, but throws exception in runtime</Option>
+        <Option correct="true">The code will not compile</Option>
+      </Options>
+      <ExplanationText><![CDATA[The code will not compile because default signature of the close() method throws Exception. Exception is a checked exception and you have to ether declair it or surround with try/catch.<br/><br/>
+
+That is not nice, I know.]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[What will be the result of compiling and running following code
+
+<java>
+public class Example1 {
+    public static void main(String[] args) {
+        try{
+            throw new RuntimeException("try");
+        }catch (RuntimeException | Exception e) {
+            System.out.println("catch");
+        }
+    }
+}
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="true">Code will not compile, because RuntimeException is subclass of Exception</Option>
+        <Option correct="false">Code will not compile, because catch block does not give a name to RuntimeException variable</Option>
+        <Option correct="false"><![CDATA[Code will compile and run, printing "catch"]]></Option>
+        <Option correct="false">Code will compile and run, printing stacktrace</Option>
+      </Options>
+      <ExplanationText>With multi-catch, it is a compile-time error if a union of types contains two alternatives Di and Dj (i
+≠ j) where Di is a subtype of Dj (JLS 14.20)</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given proper imports, what will be the result of compiling and running following code?
+
+<java>
+public class Example2 {
+    public static void main(String[] args) {
+        try{
+            throw new IOException("try");
+        }catch (IOException| IllegalArgumentException e) {
+            System.out.println("catch");
+        }
+    }
+}
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">Compiles and runs, throing exception in runtime and printing stacktrace</Option>
+        <Option correct="true"><![CDATA[Compiles and runs, printing "catch"]]></Option>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "catch", followed by stacktrace]]></Option>
+        <Option correct="false">Code will not compile, because IOException is not a subclass of IllegalArgumentException</Option>
+        <Option correct="false">Code will not compile, because checked and unchecked exceptions cannot be mixed in multi-catch block</Option>
+      </Options>
+      <ExplanationText>This is correct way to use multi-catch (JLS 14.20)</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText><![CDATA[Given proper imports, what line inserted independently into code bellow will make it compile? (Choose all that apply)
+<java>
+public class Example3 {
+    public static void main(String[] args) {
+        try{
+            throw new IOException("try");
+        }catch (IOException| IllegalArgumentException e) {
+            // insert code here
+        }
+    }
+}
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">throw e;</Option>
+        <Option correct="true">throw new RuntimeException();</Option>
+        <Option correct="false">e = new IOException(); throw e;</Option>
+        <Option correct="false">e = new IllegalArgumentException(); throw e;</Option>
+        <Option correct="false">None of the given options will make the code compile</Option>
+      </Options>
+      <ExplanationText>The explanation can reference the options directly, e.g., @1@, @2@ and @3@, or all the correct options, with @allcorrect@.</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="false" singleOptionMode="false">
+      <QuestionText><![CDATA[Given proper import statements, which of the examples bellow will compile in Java SE 7? (Choose all that apply)
+
+<java>	
+1. new ArrayList<>(String).add(new String("A"));
+2. new ArrayList<String>().add(new String("A"));
+3. new ArrayList<String>().add("A");
+4. new ArrayList<>().add("A");
+5. new List<String>().add("A");
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">1</Option>
+        <Option correct="true">2</Option>
+        <Option correct="true">3</Option>
+        <Option correct="true">4</Option>
+        <Option correct="false">5</Option>
+      </Options>
+      <ExplanationText><![CDATA[#4 - ArrayList<>() should be the same as ArrayList<Object>(). There is no way for compiler to infere the type (JLS 15.9). But the code is still valid]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given proper import statements, will code bellow compile in Java SE 7?
+<java>
+  List<? extends String> list2 = new ArrayList<>();
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="true">Yes</Option>
+        <Option correct="false">Yes, but will produce warning since ArrayList is not parametrized properly</Option>
+        <Option correct="false">No, since ? cannot be used in this context</Option>
+        <Option correct="false">No, since String is a final class and cannot be extended</Option>
+        <Option correct="false">No, since ArrayList is an abstract class</Option>
+      </Options>
+      <ExplanationText>Diamond JLS 15.9, code is valid</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="false" singleOptionMode="false">
+      <QuestionText><![CDATA[Give the following, what is the correct way to use "diamond" (generics type inference feature) in Java SE 7? (Choose all that apply)
+<java>
+1. Map<String, List<String>> myMap = new HashMap<<>>();
+2. Map<String, List<String>> myMap = new HashMap<Stirng,<>>();
+3. Map<String, List<String>> myMap = new HashMap<>();
+4. Map<String, List<String>> myMap = new HashMap<>;
+5. Map<String, List<String>> myMap = new HashMap()<>;
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false">1</Option>
+        <Option correct="false">2</Option>
+        <Option correct="true">3</Option>
+        <Option correct="false">4</Option>
+        <Option correct="false">5</Option>
+      </Options>
+      <ExplanationText>Diamond JLS 15.9</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given proper import statements, will the following code compile?
+
+<java>
+public class Example4<T extends List<String>> {
+    T item = new ArrayList<>();                 // 1
+
+    public static void main(String[] args) {
+        new Example4<List<String>>();            // 2
+        System.out.println("main");
+    }
+}
+</java>]]></QuestionText>
+      <Options>
+        <Option correct="false"><![CDATA[Compiles and runs, printing "main"]]></Option>
+        <Option correct="false">Compiles, but throws exception in runtime</Option>
+        <Option correct="true"><![CDATA[Code will not compile because of the line // 1]]></Option>
+        <Option correct="false"><![CDATA[Code will not compile because of the line // 2]]></Option>
+      </Options>
+      <ExplanationText><![CDATA[Code will not compile because of the line // 1. There is not enough info for compiler to infer the type for ArrayList<>]]></ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="true">
+      <QuestionText><![CDATA[Given following code
+
+<java>
+public class Example1 {
+
+    static class SomethingWrong extends Exception {}  // 1
+    static class RealFubar extends Exception {}       // 2
+
+    public static void main(String[] args) throws SomethingWrong, RealFubar { // 3
+        try {
+            if (true) {
+                throw new SomethingWrong();
+            } else {
+                throw new RealFubar();                // 4
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+}
+</java>
+
+what will happen if you try to compile and run this code?]]></QuestionText>
+      <Options>
+        <Option correct="false"><![CDATA[Code will not compile because of lines // 1 or // 2]]></Option>
+        <Option correct="false"><![CDATA[Code will not compile because of line // 3]]></Option>
+        <Option correct="false">Code will compile and run without no output</Option>
+        <Option correct="true">Code will compile and exception will be thrown at runtime</Option>
+        <Option correct="false"><![CDATA[Code will not compile because of line // 4]]></Option>
+      </Options>
+      <ExplanationText>Intellij IDEA is wrong about it. This code will compile and will work on JSE 7. SomethingWrong will be thrown at runtime.</ExplanationText>
+    </MultipleChoiceQuestion>
+    <MultipleChoiceQuestion shufflable="true" singleOptionMode="false">
+      <QuestionText><![CDATA[Given following code
+
+<java>
+public class Example2 {
+
+    static class SomethingWrong extends Exception {
+    }
+
+    public static void main(String[] args) throws SomethingWrong {
+        try {
+            throw new SomethingWrong();
+        } catch (Exception e) {
+            // insert code here
+        }
+    }
+}
+</java>
+
+what line of code inserted independently at the // insert code here point will allow code to compile? (Choose all that apply)]]></QuestionText>
+      <Options>
+        <Option correct="true">throw e;</Option>
+        <Option correct="false">throw new Exception();</Option>
+        <Option correct="false">e = new Exception(); throw e;</Option>
+        <Option correct="true">throw new SomethingWrong();</Option>
+        <Option correct="false">e = new SomethingWrong(); throw e;</Option>
+      </Options>
+      <ExplanationText><![CDATA[throw e; - works from JSE 7.<br/>
+throw new Exception(); - does not work, throws has to be modified for it to work<br/>
+e = new Exception(); throw e; - does not work, same reason as above<br/>
+throw new SomethingWrong(); - works obviously<br/>
+e = new SomethingWrong(); throw e; - does not work.<br/>
+<br/>
+Based on <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/language/catch-multiple.html">this tutorial</a>, compiler checks if exception that you are trying to rethrow from catch block is the one you got from try block (as in "throw e;" option). If it is, compiler is able to figure out all the possible exceptions thrown from try block and you can use them to make your "throws" more narrow. If you change e (as in "e = new SomethingWrong(); throw e;" option) all bets are off. Compiler will force you to match your "throws" with the type you specified in catch block.]]></ExplanationText>
+    </MultipleChoiceQuestion>
+  </Questions>
+</QuestionSet>
+
